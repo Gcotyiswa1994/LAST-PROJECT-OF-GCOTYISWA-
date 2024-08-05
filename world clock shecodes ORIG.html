@@ -1,0 +1,160 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Clock</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>World Clock</h1>
+
+        
+        <div class="location-selector">
+            <label for="cities">Select a city:</label>
+            <select id="cities">
+                <option value="new-york">New York</option>
+                <option value="london">London</option>
+                <option value="tokyo">Tokyo</option>
+            </select>
+        </div>
+    </div><br><br><br>
+
+    <div class="clocks">
+        <div class="clock" id="new-york">
+            <h2>New York</h2>
+            <p class="time">Loading...</p>
+            <p class="date">Loading...</p>
+        </div>
+        <div class="clock" id="london">
+            <h2>London</h2>
+            <p class="time">Loading...</p>
+            <p class="date">Loading...</p>
+        </div>
+        <div class="clock" id="tokyo">
+            <h2>Tokyo</h2>
+            <p class="time">Loading...</p>
+            <p class="date">Loading...</p>
+        </div>
+    </div>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
+document.addEventListener('DOMContentLoaded', function() {
+    const clocks = document.querySelectorAll('.clock');
+
+    // Initially hide all clocks except the first one
+    for (let i = 1; i < clocks.length; i++) {
+        clocks[i].style.display = 'none';
+    }
+
+    const citySelect = document.getElementById('cities');
+    citySelect.addEventListener('change', function() {
+        const selectedCity = citySelect.value;
+
+        // Hide all clocks
+        clocks.forEach(clock => {
+            clock.style.display = 'none';
+        });
+
+        // Show the selected city's clock
+        document.getElementById(selectedCity).style.display = 'block';
+
+        // Update the time and date for the selected city
+        updateClock(selectedCity);
+    });
+});
+
+function updateClock(city) {
+    const now = new Date();
+
+    const locations = {
+        'new-york': { offset: -5 },
+        'london': { offset: 0 },
+        'tokyo': { offset: 9 }
+    };
+
+    const locationTime = new Date(now.getTime() + (locations[city].offset * 3600000));
+    const hours = locationTime.getHours().toString().padStart(2, '0');
+    const minutes = locationTime.getMinutes().toString().padStart(2, '0');
+    const seconds = locationTime.getSeconds().toString().padStart(2, '0');
+    const timeString = `${hours}:${minutes}:${seconds}`;
+
+    const month = (locationTime.getMonth() + 1).toString().padStart(2, '0');
+    const day = locationTime.getDate().toString().padStart(2, '0');
+    const year = locationTime.getFullYear();
+    const dateString = `${month}/${day}/${year}`;
+
+    const clockElement = document.getElementById(city);
+    clockElement.querySelector('.time').textContent = timeString;
+    clockElement.querySelector('.date').textContent = dateString;
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    margin-top: 0;
+}
+
+.clocks {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.clock {
+    flex: 1;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.clock h2 {
+    margin-top: 0;
+}
+
+.time {
+    font-size: 24px;
+}
+
+.date {
+    font-style: italic;
+    color: #666;
+}
+
+.location-selector {
+    margin-top: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+select {
+    padding: 8px;
+    font-size: 16px;
+}
+
+
+
+
